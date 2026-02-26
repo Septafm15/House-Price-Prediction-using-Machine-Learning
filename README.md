@@ -22,7 +22,7 @@ This repository contains the following notebooks:
   Data loading and initial inspection of dataset structure.
 
 - **02_EDA.ipynb**  
-  Exploratory Data Analysis, including distribution analysis, skewness evaluation, correlation analysis, and outlier assessment.
+  Exploratory Data Analysis, including distribution analysis, skewness evaluation, and correlation analysis.
 
 - **03_Modelling.ipynb**  
   Feature preparation, model training, cross-validation, hyperparameter tuning, evaluation, and model saving.
