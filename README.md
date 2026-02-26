@@ -2,86 +2,125 @@
 
 ## Project Overview
 
-This project builds a simple regression-based machine learning model to predict house prices using a public dataset from Kaggle.
+This project builds a regression-based machine learning model to predict house prices using a public dataset from Kaggle.
 
-The objective of this project is to demonstrate a complete end-to-end regression workflow by comparing:
+The objective of this project is to demonstrate a structured end-to-end regression workflow by comparing:
 
 - Linear Regression  
 - Ridge Regression  
 - Lasso Regression  
 
-The focus of this project is not only prediction accuracy, but also building a clean and structured machine learning pipeline.
+The project focuses on building a clean modeling pipeline, evaluating model performance, and performing inference using the final trained model.
 
 ---
 
-## Dataset
+## Repository Structure
 
-- Source: Kaggle – Housing Prices Dataset  
-- Total observations: 545  
-- Target variable: `price`  
-- Feature types: Numerical and Categorical  
+This repository contains the following notebooks:
 
-The dataset includes structured features such as property size, number of bedrooms and bathrooms, parking capacity, furnishing status, and location-related indicators.
+- **01_dataset_loading.ipynb**  
+  Data loading and initial inspection of dataset structure.
+
+- **02_EDA.ipynb**  
+  Exploratory Data Analysis, including distribution analysis, skewness evaluation, correlation analysis, and outlier assessment.
+
+- **03_Modelling.ipynb**  
+  Feature preparation, model training, cross-validation, hyperparameter tuning, evaluation, and model saving.
+
+- **04_Inference.ipynb**  
+  Demonstration of prediction using the saved trained model.
+
+Additionally:
+- `data/` → contains the raw dataset  
+- `tuned_lasso_model.pkl` → saved final trained model  
+- `README.md` → project documentation  
 
 ---
 
 ## Project Workflow
 
-The project follows a structured machine learning process:
+### 1. Data Loading
+- Imported dataset from Kaggle source  
+- Inspected structure, data types, and summary statistics  
 
-### 1. Data Exploration (EDA)
-- Checked dataset structure and data types  
-- Verified no missing values  
+### 2. Exploratory Data Analysis (EDA)
 - Analyzed numerical distributions  
-- Evaluated skewness  
-- Assessed outliers using IQR method  
+- Evaluated skewness of numerical features  
+- Examined correlation between features and target variable  
 
-### 2. Feature Engineering
-- Split features into numerical and categorical  
-- Separated continuous and discrete numerical features  
+### 3. Feature Engineering & Modeling
+- Split dataset into training and testing sets  
 - Applied encoding for categorical variables  
-- Applied scaling based on skewness categories  
+- Applied scaling for numerical features  
+- Built regression models using:
+  - Linear Regression
+  - Ridge Regression
+  - Lasso Regression  
+- Evaluated models using MAE, RMSE, and R²  
+- Performed cross-validation to assess model stability  
+- Conducted hyperparameter tuning for Lasso using GridSearchCV  
+- Selected tuned Lasso as the final model  
 
-### 3. Preprocessing Pipeline
-- Implemented `ColumnTransformer` for clean preprocessing  
-- Used `Pipeline` to combine preprocessing and model  
-- Prevented data leakage by fitting transformations only on training data  
+### 4. Model Saving
+- Saved the trained model pipeline as `tuned_lasso_model.pkl`  
+- Ensured preprocessing steps are included in the saved pipeline  
 
-### 4. Model Training
-- Trained Linear Regression as baseline  
-- Compared with Ridge and Lasso regression  
-- Evaluated using MAE, RMSE, and R²  
-
-### 5. Cross-Validation
-- Applied 5-fold cross-validation  
-- Assessed model stability and generalization  
-- Selected best-performing model  
-
-### 6. Hyperparameter Tuning
-- Performed GridSearchCV for the best model  
-- Optimized the parameter  
-- Selected tuned model as final model  
-
-### 7. Model Saving
-- Saved final model as serialized pipeline  
-- Ensured preprocessing steps are included  
-
-### 8. Inference
-- Demonstrated prediction on new house data  
-- Validated logical consistency of predictions  
+### 5. Inference
+- Loaded saved model  
+- Performed predictions on new house data  
+- Validated logical consistency of predicted values  
 
 ---
 
 ## Libraries Used
 
-The following Python libraries were used in this project:
+The following Python libraries were used:
 
-- **pandas** – data manipulation  
-- **numpy** – numerical operations  
-- **matplotlib** – data visualization  
-- **seaborn** – data visualization 
-- **scikit-learn** – modeling and preprocessing  
-- **statsmodels** – regression diagnostics  
-- **scipy** – statistical analysis  
-- **feature-engine** – outlier handling  
-- **pickle** – model serialization  
+- `pandas`
+- `numpy`
+- `matplotlib`
+- `seaborn`
+- `scikit-learn`
+- `statsmodels`
+- `scipy`
+- `feature-engine`
+- `pickle`
+
+---
+
+## Key Learning Points
+
+- Regression models can effectively predict structured tabular data.
+- Proper scaling and encoding are essential for linear models.
+- Cross-validation improves reliability of model evaluation.
+- Hyperparameter tuning enhances model robustness.
+- Saving the full pipeline ensures deployment readiness.
+
+---
+
+## Model Usage (Inference Example)
+
+```python
+import pickle
+import pandas as pd
+
+with open("tuned_lasso_model.pkl", "rb") as f:
+    model = pickle.load(f)
+
+new_house = pd.DataFrame([{
+    "area": 6000,
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "stories": 2,
+    "mainroad": "yes",
+    "guestroom": "no",
+    "basement": "no",
+    "hotwaterheating": "no",
+    "airconditioning": "yes",
+    "parking": 1,
+    "prefarea": "yes",
+    "furnishingstatus": "semi-furnished"
+}])
+
+prediction = model.predict(new_house)
+print(f"Predicted House Price: {prediction[0]:,.0f}")
